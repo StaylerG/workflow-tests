@@ -24,7 +24,7 @@ jobs:
         # get_remote_last_tag
         echo "NEW_TAG=$(git ls-remote --tags --refs --exit-code --sort=-v:refname https://github.com/nuxeo/nuxeo.git |\
           awk -v parc=release-10.10-HF '$2~parc {print $2 |" sort -V"} ' |\
-            tail -2 | head -1 | xargs basename)" >> $GITHUB_ENV
+            tail -1 | xargs basename)" >> $GITHUB_ENV
         echo ${NEW_TAG}
     - name: Update_repo_to_tag
       id: update_repo_to_tag
@@ -32,5 +32,5 @@ jobs:
       run: |
         git remote add --tags -t 10.10 tmp_upstream https://github.com/nuxeo/nuxeo.git
         git fetch tmp_upstream 10.10 --quiet
-        git merge -Xtheirs ${NEW_TAG} --allow-unrelated-histories
+        git merge ${NEW_TAG} -Xtheirs --allow-unrelated-histories
         git push origin ${NEW_TAG}
