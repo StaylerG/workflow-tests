@@ -1,0 +1,36 @@
+on:
+  schedule:
+  - cron:  "30 */2 * * *"
+  workflow_dispatch:
+
+jobs:
+  update_repo_by_remote:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Git checkout
+      uses: actions/checkout@v2
+    - name: get_last_tag
+      id: get_last_tag
+      run: |
+        git tag -l | grep "^release-10.10-HF" | sort -V | tail -1
+    - name: get_remote_last_tag
+      id: get_remote_last_tag
+      run: |
+        # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
+        git config user.name "GitHub Actions Bot"
+        git config user.email "<>"
+        # get_remote_last_tag
+        echo "NEW_TAG=$(git ls-remote --tags --refs --exit-code --sort=-v:refname https://github.com/nuxeo/nuxeo.git |\
+          awk -v parc=release-10.10-HF '$2~parc {print $2 |" sort -V"} ' |\
+            tail -2 | head -1 | xargs basename)" >> $GITHUB_ENV
+        echo ${NEW_TAG}
+    - name: Update_repo_to_tag
+      id: update_repo_to_tag
+      if: ${{ steps.get_last_tag.outputs.stdout }} != ${{ steps.get_last_tag.outputs.stdout }}
+      run: |
+        git remote add --tags -t 10.10 tmp_upstream https://github.com/nuxeo/nuxeo.git
+        git fetch tmp_upstream 10.10 --quiet
+        git merge ${NEW_TAG} -Xtheirs release-10.10-HF57 --allow-unrelated-histories
+        git push origin
