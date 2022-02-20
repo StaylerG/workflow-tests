@@ -330,7 +330,8 @@ public class MongoDBRepository extends DBSRepositoryBase {
         coll.createIndex(Indexes.ascending(KEY_READ_ACL));
         IndexOptions parentNameIndexOptions = new IndexOptions();
         if (descriptor != null) {
-            parentNameIndexOptions.unique(Boolean.TRUE.equals(descriptor.getChildNameUniqueConstraintEnabled()));
+            parentNameIndexOptions.unique(Boolean.TRUE.equals(descriptor.getChildNameUniqueConstraintEnabled()))
+                                  .partialFilterExpression(Filters.exists(KEY_PARENT_ID));
         }
         coll.createIndex(Indexes.ascending(KEY_PARENT_ID, KEY_NAME), parentNameIndexOptions);
         // often used in user-generated queries
@@ -1247,7 +1248,7 @@ public class MongoDBRepository extends DBSRepositoryBase {
         options.maxTime(getMaxTimeMs(), MILLISECONDS);
         try {
             return MongoDBCountHelper.countDocuments(databaseID, coll, filter, options);
-        } catch (MongoExecutionTimeoutException e) {
+        } catch (MongoExecutionTimeoutException | MongoSocketReadTimeoutException e) {
             log.warn(String.format("MongoDB timed out when computing total count with filters %s", filter.toString()));
             return -2;
         }
