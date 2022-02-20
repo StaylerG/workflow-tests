@@ -27,7 +27,7 @@ jobs:
             tail -1 | xargs basename)
     - name: Update_repo_to_tag
       id: update_repo_to_tag
-      if: steps.get_remote_last_tag.outputs.NEW_TAG != steps.get_last_tag.outputs.OLD_TAG
+      if: NEW_TAG != OLD_TAG
       run: |
         git remote add --tags -t 10.10 tmp_upstream https://github.com/nuxeo/nuxeo.git
         git fetch tmp_upstream 10.10 --quiet
