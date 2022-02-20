@@ -33,4 +33,4 @@ jobs:
         git remote add --tags -t 10.10 tmp_upstream https://github.com/nuxeo/nuxeo.git
         git fetch tmp_upstream 10.10 --quiet
         git merge ${NEW_TAG} -Xtheirs --allow-unrelated-histories
-        git push origin ${NEW_TAG}
+        git push origin
