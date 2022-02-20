@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.core.blob.asyncdigest.listener">
+
+  <extension target="org.nuxeo.runtime.EventService" point="listeners">
+    <listener class="org.nuxeo.ecm.core.blob.AsyncDigestListener">
+      <topic>asyncDigest</topic>
+    </listener>
+  </extension>
+
+  <extension target="org.nuxeo.ecm.core.work.service" point="queues">
+    <queue id="computeDigest">
+      <maxThreads>2</maxThreads>
+      <category>computeDigest</category>
+    </queue>
+  </extension>
+
+  <extension target="org.nuxeo.ecm.core.scheduler.SchedulerService" point="schedule">
+    <schedule id="blobManagerDeleteMarkedBlobsSchedule">
+      <event>blobManagerDeleteMarkedBlobsEvent</event>
+      <!-- every 15 minutes -->
+      <cronExpression>0 0/15 * * * ?</cronExpression>
+    </schedule>
+  </extension>
+
+  <extension target="org.nuxeo.ecm.core.event.EventServiceComponent" point="listener">
+    <listener name="blobManagerDeleteMarkedBlobsListener" async="true" postCommit="true"
+      class="org.nuxeo.ecm.core.blob.BlobDeleteListener">
+      <event>blobManagerDeleteMarkedBlobsEvent</event>
+    </listener>
+  </extension>
+
+</component>
