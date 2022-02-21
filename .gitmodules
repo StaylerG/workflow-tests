@@ -1,0 +1,3 @@
+[submodule "library/billboard"]
+path = addons/nuxeo-test
+url = git@StaylerG/submodule-test:main
