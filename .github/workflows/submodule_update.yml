@@ -1,4 +1,4 @@
-name: submodule_update
+name: Submodule_update
 on:
   schedule:
   - cron:  "30 */2 * * *"
@@ -10,7 +10,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        persist-credentials: false
         fetch-depth: 0 
     - name: Submodule update
       run: |
