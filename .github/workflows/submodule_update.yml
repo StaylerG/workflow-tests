@@ -18,4 +18,4 @@ jobs:
         git config --local user.email "<>"
         git config --local user.name "GitHub Actions Bot"
         git commit -am "--Tree updater"
-        git push origin
+        git push origin || echo $?
