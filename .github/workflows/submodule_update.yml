@@ -12,10 +12,13 @@ jobs:
       with:
         fetch-depth: 0 
     - name: Submodule update
+      id: submodule_update
       run: |
         git submodule init
         git submodule update --remote --merge
         git config --local user.email "<>"
         git config --local user.name "GitHub Actions Bot"
-        git commit -am "--Tree updater"
-        git push origin || echo $?
+        git commit -am "--Tree updater" || echo ::set-output name=NO_CHANGES::true
+    - name: Push updates
+      if: ${{ steps.submodule_update.outputs.NO_CHANGES != true }}
+      run: git push origin
