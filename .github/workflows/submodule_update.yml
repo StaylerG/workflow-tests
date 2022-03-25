@@ -18,7 +18,7 @@ jobs:
         git submodule update --remote --merge
         git config --local user.email "<>"
         git config --local user.name "GitHub Actions Bot"
-        git commit -am "--Tree updater" || echo ::set-output name=NO_CHANGES::true
+        git commit -am "--Tree updater"
     - name: Push updates
       if: ${{ steps.submodule_update.outputs.NO_CHANGES != true }}
       run: git push origin
