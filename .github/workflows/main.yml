@@ -32,7 +32,7 @@ jobs:
         git remote add --tags -t 10.10 tmp_upstream https://github.com/nuxeo/nuxeo.git
         git fetch tmp_upstream 10.10 --quiet
         git merge ${NEW_TAG} -Xtheirs --allow-unrelated-histories
-        python clone.py master -a ${NEW_TAG}
+        python clone.py ${NEW_TAG} -a
         git add addons/ -f
         git reset addons/*/.git*
         git commit -m "${NEW_TAG}"
