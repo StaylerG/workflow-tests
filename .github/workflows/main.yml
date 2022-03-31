@@ -27,14 +27,14 @@ jobs:
             tail -1 | xargs basename)
     - name: Update_repo_to_tag
       id: update_repo_to_tag
-      if: ${{ steps.get_remote_last_tag.outputs.NEW_TAG == steps.get_last_tag.outputs.OLD_TAG }}
+      if: ${{ steps.get_remote_last_tag.NEW_TAG == steps.get_last_tag.OLD_TAG }}
       run: |
-        python clone.py ${{ steps.get_remote_last_tag.outputs.NEW_TAG }} -a
+        python clone.py ${{ steps.get_remote_last_tag.NEW_TAG }} -a
         git add addons/ -f
         git reset addons/*/.git*
-        git commit -m "${{ steps.get_remote_last_tag.outputs.NEW_TAG }}"
+        git commit -m "${{ steps.get_remote_last_tag.NEW_TAG }}"
         git push origin
         git remote add --tags -t 10.10 tmp_upstream https://github.com/nuxeo/nuxeo.git
         git fetch tmp_upstream 10.10 --quiet
-        git merge ${{ steps.get_remote_last_tag.outputs.NEW_TAG }} -Xtheirs --allow-unrelated-histories
-        git push origin ${{ steps.get_remote_last_tag.outputs.NEW_TAG }}
+        git merge ${{ steps.get_remote_last_tag.NEW_TAG }} -Xtheirs --allow-unrelated-histories
+        git push origin ${{ steps.get_remote_last_tag.NEW_TAG }}
