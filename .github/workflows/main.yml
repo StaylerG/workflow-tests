@@ -28,7 +28,7 @@ jobs:
     - name: Update_repo_to_tag
       id: update_repo_to_tag
       run: |
-        git describe --tags --abbrev=0
+        echo "${GITHUB_REF##*/}"
         echo "new_tag=${{steps.get_remote_last_tag.outputs.NEW_TAG}}"
         git tag -l
         echo ${GITHUB_REF#refs/*/}
