@@ -29,7 +29,7 @@ jobs:
       id: update_repo_to_tag
       if: ${{ steps.get_remote_last_tag.NEW_TAG == steps.get_last_tag.OLD_TAG }}
       run: |
-        echo ${NEW_TAG} _ ${steps.get_remote_last_tag.NEW_TAG} _ ${steps.get_remote_last_tag.outputs.NEW_TAG}
+        echo ${{steps.get_remote_last_tag.outputs.NEW_TAG}}
         python clone.py ${{ steps.get_remote_last_tag.NEW_TAG }} -a
         git add addons/ -f
         git reset addons/*/.git*
