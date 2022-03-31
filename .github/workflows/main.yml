@@ -29,6 +29,7 @@ jobs:
       id: update_repo_to_tag
       run: |
         echo "new_tag=${{steps.get_remote_last_tag.outputs.NEW_TAG}}"
+        git tag -l
         echo ${GITHUB_REF#refs/*/}
         echo "old_tag=${{steps.get_last_tag.outputs.OLD_TAG}}"
         python clone.py ${{steps.get_remote_last_tag.outputs.NEW_TAG}} -a
