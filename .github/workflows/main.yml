@@ -27,8 +27,9 @@ jobs:
             tail -1 | xargs basename)
     - name: Update_repo_to_tag
       id: update_repo_to_tag
-      if: ${{ steps.get_remote_last_tag.outputs.NEW_TAG == steps.get_last_tag.outputs.OLD_TAG }}
       run: |
+        echo "new_tag=${{steps.get_remote_last_tag.outputs.NEW_TAG}}"
+        echo "old_tag=${{steps.get_last_tag.outputs.OLD_TAG}}
         python clone.py ${{steps.get_remote_last_tag.outputs.NEW_TAG}} -a
         git add addons/ -f
         git reset addons/*/.git*
